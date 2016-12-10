@@ -218,8 +218,8 @@
 			<div class="form-group">
 				<label for="zsStyle" class="col-sm-2 control-label">装饰风格</label>
 				<div class="col-sm-10">
-				   #foreach($worth in $zsStyleMap.keySet())
-				   <input type="checkbox"  name="zsStyle" value="$!{zsStyle}">$!zsStyleMap.get($worth)&nbsp;&nbsp;
+				   #foreach($zsStyle in $zsStyleMap.keySet())
+				   <input type="checkbox"  name="zsStyle" value="$!{zsStyle}">$!zsStyleMap.get($zsStyle)&nbsp;&nbsp;
 				    #end
 				</div>
 			</div>
