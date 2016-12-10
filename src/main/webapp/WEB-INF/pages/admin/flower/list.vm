@@ -1,0 +1,123 @@
+<html>
+<head>
+<title>场馆列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" href="${basePath}favicon.ico" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link type="text/css" rel="stylesheet" href="${basePath}bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="${basePath}ace/css/font-awesome.min.css" />
+<link rel="stylesheet" href="${basePath}ace/google/css.css" /> 
+<link type="text/css" rel="stylesheet" href="${basePath}ace/ace.min.css" />
+<!--[if IE 7]>
+<link rel="stylesheet" href="${basePath}ace/css/font-awesome-ie7.min.css" />
+<![endif]-->
+
+<!--[if !IE]> -->
+<script src="${basePath}jquery/2.0.3/jquery.min.js"></script>
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script src="${basePath}jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+<!--[if !IE]> -->
+
+<script type="text/javascript">
+	window.jQuery || document.write("<script src='${basePath}jquery/2.0.3/jquery.min.js'>"+"<"+"/script>");
+</script>
+<script src="${basePath}bootstrap/js/bootstrap.min.js"></script>
+<script src="${basePath}ace/ace.min.js"></script>
+<script src="${basePath}ace/ace-elements.min.js"></script>
+<style type="text/css">
+	td,th{
+		font-size: 13px;
+	}
+</style>
+</head>#parse('WEB-INF/include/constant.vm')
+#set($isFlowerMenu=true)#set($isFlower=true)
+<body class="navbar-fixed breadcrumbs-fixed">
+#parse('WEB-INF/pages/admin/head.vm')
+<div id="main-container" class="main-container">
+	<script type="text/javascript">
+		try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+	</script>
+	<div class="main-container-inner">
+		#parse('WEB-INF/pages/admin/sidebar.vm')
+		<div class="main-content">
+			#parse('WEB-INF/pages/admin/mainHomeMenu.vm')
+			<div class="page-content">
+				<div class="page-header">
+					<div class="col-xs-12">
+						<h3 class="header smaller lighter blue pull-left">植物列表</h3>
+						<h5 class="header smaller lighter blue pull-right"><a class="btn btn-xs btn-default" href="${basePath}admin/flower/modify.xhtml">添加</a></h5>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="table-responsive">
+										<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+										   <thead>
+										      <tr>
+										      	 <th>图片</th>
+										         <th>植物名称</th>
+										         <th>观赏部位</th>
+										         <th>植株性质</th>
+										         <th>类群</th>
+										         <th>添加日期</th>
+										         <th>操作</th>
+										      </tr>
+										   </thead>
+										   <tbody>
+										   	  #foreach($flower in $flowerList)
+										      <tr>
+										      	 <td>${imagePath}${flower.logo}</td>
+										         <td>$!flower.name</td>
+										         <td>$!flower.viewArea</td>
+										         <td>$!flower.attribute</td>
+										         <td>$!flower.grp</td>
+										         <td>
+										         	$!DateUtil.format($flower.addTime,'yyyy-MM-dd')
+										         </td>
+												 <td>
+												 	<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#accountModal" name="account" data-id="$stadium.id">登录账户</button>
+												 </td>
+										      </tr>
+										      #end
+										   </tbody>
+										</table>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="accountModalLabel" aria-hidden="true"></div>
+<script type="text/javascript">
+///$(function () { $("[data-toggle='tooltip']").tooltip(); });
+$("button[name=add]").click(function(){
+    $("#dataModal").load('${basePath}admin/stadium/stadiumDetail.xhtml',{"id":$(this).attr('data-id')});
+});
+$("button[name=account]").click(function(){
+    $("#accountModal").load('${basePath}admin/stadium/getApiAccount.xhtml',{"id":$(this).attr('data-id')});
+});
+$(document).ready(function(){
+	$("select[name=status]").change(function(){
+		var el = $(this);
+		jQuery.post("${basePath}admin/stadium/modStatus.xhtml", {"id":el.attr('id'),'status':el.val()},function(result){
+			if(result.success){
+				alert('设置成功');
+			}else {
+				alert(result.msg);
+			}
+		});
+	});
+});
+</script>
+</body>
+</html>

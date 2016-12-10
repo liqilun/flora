@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.flora.model.Flower" table="flower" lazy="false">
+		<id name="id" type="integer" column="recordid">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" column="name" />
+		<property name="ldName" type="string" column="ld_name"/>
+		<property name="aliasName" type="string" column="alias_name"/>
+		<property name="englishName" type="string" column="english_name" />
+		
+		<property name="attribute" type="string" column="attribute"/>
+		<property name="grp" type="string" column="grp"/>
+		<property name="worth" type="string" column="worth"/>
+		<property name="fitEnv" type="integer" column="fit_env"/>
+		<property name="size" type="string" column="size"/>
+		<property name="curingEasy" type="integer" column="curing_easy"/>
+		<property name="zsStyle" type="string" column="zs_style"/>
+		
+		<property name="viewArea" type="string" column="view_area"/>
+		<property name="content" type="string" column="content"/>
+		<property name="logo" type="string" column="logo"/>
+		<property name="soil" type="string" column="soil"/>
+		<property name="humidity" type="string" column="humidity"/>
+		<property name="feed" type="string" column="feed"/>
+		<property name="temperature" type="string" column="temperature"/>
+		<property name="unTemperature" type="string" column="un_temperature"/>
+		<property name="flowerWord" type="string" column="flower_word"/>
+		<property name="flowerDate" type="string" column="flower_date"/>
+		
+		<property name="sunNeed" type="string" column="sun_need"/>
+		<property name="space" type="string" column="space"/>
+		<property name="habit" type="string" column="habit"/>
+		<property name="producer" type="string" column="producer"/>
+		<property name="types" type="string" column="types"/>
+		<property name="category" type="string" column="category"/>
+		
+		<property name="status" type="string" column="status"/>
+		<property name="addTime" type="date" column="add_time" not-null="true"/>
+	</class>
+</hibernate-mapping>
