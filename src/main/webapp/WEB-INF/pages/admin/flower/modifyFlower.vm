@@ -46,8 +46,22 @@
 		<div class="main-content">
 			#parse('WEB-INF/pages/admin/mainHomeMenu.vm')
 			<div class="page-content">
+			<form action="${basePath}upload.xhtml" method="post" enctype="multipart/form-data">  
+    选择文件:<input type="file" name="file">  
+    <input type="submit" value="提交">   
+</form>  
+
 		<form class="form-horizontal" role="form" id="dbform">
 			<div class="form-group">
+			</div>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">上传图片</label>
+				<img src="${basePath}images/upbg.jpg" width="110px;" height="100px;" onclick="getFileImg('logo')"/>
+				<input type="file" name="logo" style="display:none"  id="logo" onchange="uploadImg('logo')"/>
+				<img src="${basePath}images/upbg.jpg" width="110px;" height="100px;"/>
+				<img src="${basePath}images/upbg.jpg" width="110px;" height="100px;"/>
+				<img src="${basePath}images/upbg.jpg" width="110px;" height="100px;"/>
+				<img src="${basePath}images/upbg.jpg" width="110px;" height="100px;"/>
 			</div>
 			<div class="form-group">
 				<label for="name" class="col-sm-2 control-label">中文名称</label>
@@ -263,37 +277,6 @@
 </div>
 </div>
 <script type="text/javascript">
-function uploadImg(name){	
-	var imgPath = $('#'+name).val();
-    var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1);
-    if (strExtension != 'jpg' && strExtension != 'gif'
-    && strExtension != 'png' && strExtension != 'bmp') {
-    	showMaskLayTips("请选择图片文件");
-        return;
-    }
-	var data = new FormData();
-	$.each($('#'+name)[0].files, function(i, file) {
-		data.append('file', file);
-	});
-	$.ajax({
-		url:'${basePath}/upload.xhtml',
-		type:'POST',
-		data:data,
-		cache: false,
-		contentType: false,    //不可缺
-		processData: false,    //不可缺
-		success:function(data){
-		    var img = data.substring(data.indexOf('back(\'') + 6, data.indexOf('\')<'));
-		    datas[name] = img;
-		    $('#img_'+name).attr('src', '${imgPath}'+img);
-		},error: function(XMLHttpRequest, textStatus, errorThrown) {
-        	showMaskLayTips("上传失败，请检查网络后重试:"+errorThrown);
-        }
-	});
-}
-</script>
-</body>
-<script>
 $(document).ready(function(){
 	$('#sbtForm').click(function(){
 		jQuery.post("${basePath}admin/flower/saveFlower.xhtml", $("#dbform").serialize(),function(result){
@@ -305,5 +288,37 @@ $(document).ready(function(){
 		});
 	});
 });
+function getFileImg(filename){
+	$('#'+filename).click();
+}
+function uploadImg(name){	
+	var imgPath = $('#'+name).val();
+    var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1);
+    if (strExtension != 'jpg' && strExtension != 'gif'
+    && strExtension != 'png' && strExtension != 'bmp') {
+    	alert("请选择图片文件");
+        return;
+    }
+	var data = new FormData();
+	$.each($('#'+name)[0].files, function(i, file) {
+		data.append('file', file);
+	});
+	$.ajax({
+		url:'${basePath}upload.xhtml',
+		type:'POST',
+		data:data,
+		cache: false,
+		contentType: false,    //不可缺
+		processData: false,    //不可缺
+		success:function(data){
+		    var img = data.substring(data.indexOf('back(\'') + 6, data.indexOf('\')<'));
+		    datas[name] = img;
+		    $('#img_'+name).attr('src', '${imgPath}'+img);
+		},error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("上传失败，请检查网络后重试:"+errorThrown);
+        }
+	});
+}
 </script>
+</body>
 </html>

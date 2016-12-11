@@ -6,10 +6,10 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,14 +42,14 @@ public class FlowerController extends BaseController {
 
 	@RequestMapping("/upload.xhtml")
 	@ResponseBody
-	public String uploadImage(MultipartFile file) throws IOException {
+	public String uploadImage(@RequestParam MultipartFile file) throws IOException {
 		if (file == null) {
 			return "<script type=\"text/javascript\">parent.callback('请选择需要上传的图片')</script>";
 		}
 		if (file.getSize() > 1572864) { // 1024*1024*1.5
 			return "<script type=\"text/javascript\">parent.callback('上传图片太大')</script>";
 		}
-		String imgPath = file.getName();
+		String imgPath = file.getOriginalFilename();
 		// imgPath为原文件名
 		int idx = imgPath.lastIndexOf(".");
 		// 文件后缀

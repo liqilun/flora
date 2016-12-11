@@ -27,8 +27,8 @@
 	<bean id="handlerExceptionResolver"
 		class="com.flora.web.support.PageExceptionResolver">
 		<property name="warnLogCategory" value="pageError" />
-		<property name="defaultStatusCode" value="404" />
-		<property name="defaultErrorView" value="404.vm" />
+		<!-- <property name="defaultStatusCode" value="404" />
+		<property name="defaultErrorView" value="404.vm" /> -->
 	</bean>
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>飞单 注册</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta content="telephone=no" name="format-detection">
+<script type="text/javascript" src="${basePath}js/jquery.min.js"></script>
+<script type="text/javascript" src="${basePath}js/feidan.js"></script>
+<link rel="stylesheet" type="text/css" href="${basePath}css/common_min.css" />
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<#include "../../include/weixinConfig.ftl">
+<style>
+.wrap_pb {padding-bottom: 70px;}
+.fd_header{border:0;color:white}
+.icon_back::before{border-left: 2px solid #fff;border-bottom: 2px solid #fff;}
+.headPic{text-align:Center;margin:0 auto 30px}
+.personInfor{width:90%;height:40px;line-height:40px;margin:10px auto;border-radius:3px}
+.cardInfor{width:90%;height:180px;text-align:Center;border-radius:3px;background-color: white;margin:auto;margin-bottom:10px}
+.whiteGreen_Btn{border:0;height:47px;line-height:47px}
+</style>
+</head>
+<body class="bgGreen">
+<header class="fd_header size15">
+	<span  class="icon_back fl fd_header_icon size14" onclick="javascript:history.back(-1)">返回</span>
+</header>
+<section class="wrap_pb">
+	<div class="headPic">		
+		<img id="img_headPic" src="${basePath}images/headpic.png"  onclick="uploadFileImg('headPic')" width="100" height="100" style="border-radius:50%">
+		<input type="file" name="headPic" style="display:none"  id="headPic" />
+	</div>
+	<!-- <div class="text-c bgWhite size16 personInfor">李备</div>
+	<div class="text-c bgWhite size16 personInfor">410532******332145</div> -->
+	<div class="cardInfor">
+		<a><img id="img_cardPicName" src="${basePath}images/cardInfor_03.png" onclick="uploadFileImg('cardPicName')" width="160px" height="100px" class="mt30" ></a>
+		<p class="text-c size14">上传身份证正面</p>
+		<input type="file" accept="image/*"  name="cardPicName" style="display:none" id="cardPicName" />
+	</div>
+	<div class="cardInfor ">
+		<a><img id="img_cardPicName2" src="${basePath}images/cardInfor_07.png" onclick="uploadFileImg('cardPicName2')" width="160px" height="100px" class="mt30" ></a>
+		<p class="text-c size14">上传身份证背面</p>
+		<input type="file" accept="image/*"  name="cardPicName2" style="display:none" id="cardPicName2" />
+	</div>
+	<div class="cardInfor">
+		<a><img id="img_businessCard" src="${basePath}images/cardInfor_10.png" onclick="uploadFileImg('businessCard')" width="160px" height="100px" class="mt30" ></a>
+		<p class="text-c size14">上传名片</p>
+		<input type="file" accept="image/*"  name="businessCard" style="display:none" id="businessCard" />
+	</div>
+	<div class="pos_fix w100 size18" style="bottom:0">
+		<button class="whiteGreen_Btn" id="btnRegister">加入飞单</button>
+	</div>
+</section>
+<div id="masklaytips" class="mask_lay" style="display:none;" >
+	<div class="view fd-layer" style="z-index: 3018; margin-left: -145px; margin-top: -57px;">
+    	<div class="fd-pop-box">
+              <div class="fd-bd">
+   				 <div id="errorTips" class="fd-error-tips">系统繁忙....</div>
+    			  <div class="fd-roller-btns">
+                        <div id="maskLayBtnOk" onclick="closeMaskLayTips()" class="fd-flexbd fd-btns-ok">确定</div>
+       			  </div>
+ 			   </div>
+		</div>
+	</div>
+</div>
+<#include "/include/showMaskLayTips.ftl" />	
+<script type="text/javascript" >
+var datas={};
+datas.tmpStaffId='${tmpStaffId}';
+datas.phone='${phone}';
+$(function(){
+	$('#btnRegister').click(function(){
+		var tphone="${phone!''}";
+		if(tphone.length==0){
+			showMaskLayTips('缺少参数!');
+			return;
+		}
+		var pwd='${pwd!''}';
+		var url="${basePath}sanhuo/visit/reg.do";
+		$.getJSON(url,datas,function(data,textStatus){
+			if(textStatus=='success'){
+				if(data.success){
+			         showMaskLayTips('注册成功!');
+			         if(window.localStorage){ //是否支持本地存储
+			        		localStorage.setItem("phone",tphone);
+			        		localStorage.setItem("password",pwd);
+			         }
+			         location.href="${basePath}sanhuo/visit/index.do";
+			     }else{
+			         showMaskLayTips(data.message);
+			     }
+			}else{
+			    showMaskLayTips('系统繁忙,请稍后...');
+			}
+		});
+	});
+});
+    
+function closeMaskLayTips(){
+	$("#masklaytips").hide();
+}
+     
+function showMaskLayTips(tip){
+	$("#masklaytips").show();
+	$("#errorTips").html(tip);   
+}
+var uploadFileFlag=false;
+function uploadFileImg(filename){
+	if(uploadFileFlag){
+		showMaskLayTips('正在上传图片');
+		return;
+	}
+	//调用 拍照或从手机相册中选图接口
+	 wx.chooseImage({
+	     count:1, // 默认9
+		 sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+	     success: function(res) {
+	    	 uploadFileFlag=true;
+	         $('#img_'+filename).attr('src',res.localIds[0]); 
+	         uploadImage(res.localIds[0],filename);
+	     }
+	 });
+}
+
+function uploadImage(imagePath,filename){
+  
+   	wx.uploadImage({
+   	    localId:imagePath, // 需要上传的图片的本地ID，由chooseImage接口获得
+   	    isShowProgressTips: 1, // 默认为1，显示进度提示
+   	    success: function (res) {
+   	        var serverId1 = res.serverId; // 返回图片的服务器端ID1
+   	    	$.post("${basePath}visit/wx/uploadFile.do",{serverId:serverId1},function(result){
+   	    		if(result && result.success){
+   	    			datas[filename]=result.message;
+   	    		}else{
+   	    			showMaskLayTips(result.message);
+   	    		}
+   	    		uploadFileFlag=false;
+   	    	});
+   	    }
+   	});    	
+}
+</script>
+
+</body>
+<html>

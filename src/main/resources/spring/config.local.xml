@@ -22,7 +22,7 @@
 				<entry key="VmUtils" value-ref="VmUtils" />
 			</map>
 		</property>
-		<property name="imagePath" value="http://114.215.107.90:8080/iupload/" />
-		<property name="uploadPath" value="/root/tomcatproject/iupload/" />
+		<property name="imagePath" value="http://localhost:8086/iupload/" />
+		<property name="uploadPath" value="/Users/liqilun/" />
 	</bean>
 </beans>
