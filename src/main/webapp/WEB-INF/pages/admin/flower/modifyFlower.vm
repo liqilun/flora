@@ -295,6 +295,7 @@ $(document).ready(function(){
 		});
 	});
 });
+var datas={};
 function getFileImg(filename){
 	$('#'+filename).click();
 }
