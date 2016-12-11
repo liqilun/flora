@@ -1,9 +1,15 @@
 package com.flora.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 public class Flower extends BaseObject{
+	private static final long serialVersionUID = 1650115535005553401L;
 	/*图片	最多可上传10张，可设置封面图，支持图片排序	*/
 	private Integer id;
 	//名称/中文学名
@@ -66,6 +72,42 @@ public class Flower extends BaseObject{
 	private Date addTime;
 	
 	private String status;
+	public List<String> getAttributeList(){
+		if(StringUtils.isBlank(attribute)){
+			return new ArrayList<String>();
+		}
+		return Arrays.asList(attribute.split(","));
+	}
+	public List<String> getGrpList(){
+		if(StringUtils.isBlank(grp)){
+			return new ArrayList<String>();
+		}
+		return Arrays.asList(grp.split(","));
+	}
+	public List<String> getViewAreaList(){
+		if(StringUtils.isBlank(viewArea)){
+			return new ArrayList<String>();
+		}
+		return Arrays.asList(viewArea.split(","));
+	}
+	public List<String> getWorthList(){
+		if(StringUtils.isBlank(worth)){
+			return new ArrayList<String>();
+		}
+		return Arrays.asList(worth.split(","));
+	}
+	public List<String> getSizeList(){
+		if(StringUtils.isBlank(size)){
+			return new ArrayList<String>();
+		}
+		return Arrays.asList(size.split(","));
+	}
+	public List<String> getZsStyleList(){
+		if(StringUtils.isBlank(zsStyle)){
+			return new ArrayList<String>();
+		}
+		return Arrays.asList(zsStyle.split(","));
+	}
 	public Integer getId() {
 		return id;
 	}

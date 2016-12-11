@@ -34,7 +34,7 @@
 	}
 </style>
 </head>#parse('WEB-INF/include/constant.vm')
-#set($isStadiumMenu=true)#set($isStadium=true)
+#set($isFlowerMenu=true)#set($isFlower=true)
 <body class="navbar-fixed breadcrumbs-fixed">
 #parse('WEB-INF/pages/admin/head.vm')
 <div id="main-container" class="main-container">
@@ -90,24 +90,36 @@
 				<label for="viewArea" class="col-sm-2 control-label">观赏部位</label>
 				<div class="col-sm-10">
 				   #foreach($viewArea in $viewAreaMap.keySet())
-				   <input type="checkbox"  name="viewArea" value="$!{viewArea}">$!viewAreaMap.get($viewArea)&nbsp;&nbsp;
-				    #end
+				   		#if($flower && $flower.viewAreaList.contains($viewArea))
+						<input type="checkbox"  name="viewArea" value="$!{viewArea}" checked="checked">$!viewAreaMap.get($viewArea)&nbsp;&nbsp;
+				   		#else
+				   		<input type="checkbox"  name="viewArea" value="$!{viewArea}">$!viewAreaMap.get($viewArea)&nbsp;&nbsp;
+				   		#end
+				   #end
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="attribute" class="col-sm-2 control-label">植株性质</label>
 				<div class="col-sm-10">
 				   #foreach($attribute in $attributeMap.keySet())
-				   <input type="checkbox"  name="attribute" value="$!{attribute}">$!attributeMap.get($attribute)&nbsp;&nbsp;
-				    #end
+					   #if($flower && $flower.attributeList.contains($attribute))
+					   <input type="checkbox"  name="attribute" value="$!{attribute}" checked="checked">$!attributeMap.get($attribute)&nbsp;&nbsp;
+					   #else
+					    <input type="checkbox"  name="attribute" value="$!{attribute}">$!attributeMap.get($attribute)&nbsp;&nbsp;
+					   #end
+				   #end
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="grp" class="col-sm-2 control-label">类群</label>
 				<div class="col-sm-10">
 				   #foreach($grp in $grpMap.keySet())
-				   <input type="checkbox"  name="grp" value="$!{grp}">$!grpMap.get($grp)&nbsp;&nbsp;
-				    #end
+					   #if($flower && $flower.grpList.contains($grp))
+					   <input type="checkbox"  name="grp" value="$!{grp}" checked="checked">$!grpMap.get($grp)&nbsp;&nbsp;
+					   #else
+					   <input type="checkbox"  name="grp" value="$!{grp}">$!grpMap.get($grp)&nbsp;&nbsp; 
+					   #end
+				   #end
 				</div>
 			</div>
 			<div class="form-group">
@@ -120,7 +132,11 @@
 				<label for="worth" class="col-sm-2 control-label">主要价值</label>
 				<div class="col-sm-10">
 				   #foreach($worth in $worthMap.keySet())
-				   <input type="checkbox"  name="worth" value="$!{grp}">$!worthMap.get($worth)&nbsp;&nbsp;
+				   		#if($flower && $flower.worthList.contains($worth))
+				   		<input type="checkbox"  name="worth" value="$!{grp}" checked="checked">$!worthMap.get($worth)&nbsp;&nbsp;
+				   		#else
+				   		<input type="checkbox"  name="worth" value="$!{grp}">$!worthMap.get($worth)&nbsp;&nbsp;
+				   		#end
 				    #end
 				</div>
 			</div>
@@ -134,7 +150,7 @@
 				<label for="fitEnv" class="col-sm-2 control-label">适宜环境</label>
 				<div class="col-sm-10">
 				   #foreach($fitEnv in $fitEnvMap.keySet())
-				   <input type="radio"  name="fitEnv" value="$!{fitEnv}">$!fitEnvMap.get($fitEnv)&nbsp;&nbsp;
+				   <input type="radio"  name="fitEnv" value="$!{fitEnv}" #if($fitEnv==1 || ($flower && $flower.fitEnv==$fitEnv)) checked="checked"#end>$!fitEnvMap.get($fitEnv)&nbsp;&nbsp;
 				    #end
 				</div>
 			</div>
@@ -188,9 +204,9 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="unTemperature" class="col-sm-2 control-label">光照要求</label>
+				<label for="sunNeed" class="col-sm-2 control-label">光照要求</label>
 				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="unTemperature" value="$!flower.sunNeed">
+				   <input type="text" class="form-control" name="sunNeed" value="$!flower.sunNeed">
 				</div>
 			</div>
 			<div class="form-group">
@@ -202,16 +218,21 @@
 			<div class="form-group">
 				<label for="size" class="col-sm-2 control-label">尺寸</label>
 				<div class="col-sm-10">
-				   #foreach($size in $sizeMap.keySet())
-				   <input type="checkbox"  name="size" value="$!{size}">$!sizeMap.get($size)&nbsp;&nbsp;
-				    #end
+				   #foreach($ssize in $sizeMap.keySet())
+					   #if($flower && $flower.sizeList.contains($ssize))
+					   <input type="checkbox"  name="size" value="$!{ssize}" checked="checked">$!sizeMap.get($ssize)&nbsp;&nbsp;
+					   #else
+					   <input type="checkbox"  name="size" value="$!{ssize}">$!sizeMap.get($ssize)&nbsp;&nbsp;
+					   #end
+				   #end
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="curingEasy" class="col-sm-2 control-label">养护难易</label>
 				<div class="col-sm-10">
 				   #foreach($curingEasy in $curingEasyMap.keySet())
-				   <input type="radio"  name="curingEasy" value="$!{curingEasy}">$!curingEasyMap.get($curingEasy)&nbsp;&nbsp;
+				   <input type="radio"  name="curingEasy" value="$!{curingEasy}" 
+				   		#if($curingEasy==1 || ($flower && $flower.curingEasy==$curingEasy)) checked="checked"#end>$!curingEasyMap.get($curingEasy)&nbsp;&nbsp;
 				    #end
 				</div>
 			</div>
@@ -219,7 +240,11 @@
 				<label for="zsStyle" class="col-sm-2 control-label">装饰风格</label>
 				<div class="col-sm-10">
 				   #foreach($zsStyle in $zsStyleMap.keySet())
-				   <input type="checkbox"  name="zsStyle" value="$!{zsStyle}">$!zsStyleMap.get($zsStyle)&nbsp;&nbsp;
+				   		 #if($flower && $flower.zsStyleList.contains($zsStyle))
+				   		<input type="checkbox"  name="zsStyle" value="$!{zsStyle}" checked="checked">$!zsStyleMap.get($zsStyle)&nbsp;&nbsp;
+				   		#else
+				   		<input type="checkbox"  name="zsStyle" value="$!{zsStyle}">$!zsStyleMap.get($zsStyle)&nbsp;&nbsp;
+				   		#end
 				    #end
 				</div>
 			</div>
@@ -237,6 +262,36 @@
 </div>
 </div>
 </div>
+<script type="text/javascript">
+function uploadImg(name){	
+	var imgPath = $('#'+name).val();
+    var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1);
+    if (strExtension != 'jpg' && strExtension != 'gif'
+    && strExtension != 'png' && strExtension != 'bmp') {
+    	showMaskLayTips("请选择图片文件");
+        return;
+    }
+	var data = new FormData();
+	$.each($('#'+name)[0].files, function(i, file) {
+		data.append('file', file);
+	});
+	$.ajax({
+		url:'${basePath}/upload.xhtml',
+		type:'POST',
+		data:data,
+		cache: false,
+		contentType: false,    //不可缺
+		processData: false,    //不可缺
+		success:function(data){
+		    var img = data.substring(data.indexOf('back(\'') + 6, data.indexOf('\')<'));
+		    datas[name] = img;
+		    $('#img_'+name).attr('src', '${imgPath}'+img);
+		},error: function(XMLHttpRequest, textStatus, errorThrown) {
+        	showMaskLayTips("上传失败，请检查网络后重试:"+errorThrown);
+        }
+	});
+}
+</script>
 </body>
 <script>
 $(document).ready(function(){
