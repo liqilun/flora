@@ -15,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.flora.Config;
 import com.flora.model.Flower;
+import com.flora.util.BindUtils;
+import com.flora.util.StringUtil;
+import com.flora.web.util.WebUtils;
 
 @Controller
 public class FlowerController extends BaseController {
@@ -33,9 +36,15 @@ public class FlowerController extends BaseController {
 	}
 
 	@RequestMapping("/admin/flower/saveFlower.xhtml")
-	public String place(Flower flower, ModelMap model) {
-		flower.setStatus("y");
-		flower.setAddTime(new Date());
+	public String place(Integer id,  ModelMap model, HttpServletRequest request) {
+		Flower flower = new Flower();
+		if(id!=null){
+			flower = daoService.getObject(Flower.class, id);
+		}else {
+			flower.setStatus("y");
+			flower.setAddTime(new Date());
+		}
+		BindUtils.bindData(flower, WebUtils.getRequestMap(request));
 		daoService.saveObject(flower);
 		return writeJsonSuccess(model);
 	}
@@ -54,8 +63,9 @@ public class FlowerController extends BaseController {
 		int idx = imgPath.lastIndexOf(".");
 		// 文件后缀
 		String ext = imgPath.substring(idx);
-		String fileName = "flora/" + com.flora.util.StringUtil.getRandomString(8).toLowerCase() + ext;
-		File newfile = new File(Config.UPLOAD_PATH + fileName);
+		String fileName = StringUtil.getRandomString(10).toLowerCase() + ext;
+		String fullName = Config.UPLOAD_PATH + fileName;
+		File newfile = new File(fullName);
 		file.transferTo(newfile);
 		return "<script type=\"text/javascript\">parent.callback('" + fileName + "')</script>";
 	}
