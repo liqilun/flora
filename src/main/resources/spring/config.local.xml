@@ -20,9 +20,10 @@
 				<entry key="absPath" value="http://114.215.107.90:8080/flora/" />
 				<entry key="reportUrl" value="http://114.215.107.90:8080/flora/client/report/index.xhtml" />
 				<entry key="VmUtils" value-ref="VmUtils" />
+				<entry key="imagePath" value="http://localhost/floraimg/" />
 			</map>
 		</property>
-		<property name="imagePath" value="http://localhost:8086/iupload/" />
-		<property name="uploadPath" value="/Users/liqilun/" />
+		<property name="imagePath" value="http://localhost/floraimg/" />
+		<property name="uploadPath" value="D:\\nginx\\html\\floraimg\\" />
 	</bean>
 </beans>

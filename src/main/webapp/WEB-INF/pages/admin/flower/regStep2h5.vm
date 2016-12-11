@@ -6,11 +6,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta content="telephone=no" name="format-detection">
-<script type="text/javascript" src="${basePath}js/jquery.min.js"></script>
-<script type="text/javascript" src="${basePath}js/feidan.js"></script>
-<link rel="stylesheet" type="text/css" href="${basePath}css/common_min.css" />
-<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<#include "../../include/weixinConfig.ftl">
+<script type="text/javascript" src="${request.contextPath}/js/jquery.min.js"></script>
+<script type="text/javascript" src="${request.contextPath }/js/feidan.js"></script>
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/css/common_min.css" />
 <style>
 .wrap_pb {padding-bottom: 70px;}
 .fd_header{border:0;color:white}
@@ -27,25 +25,25 @@
 </header>
 <section class="wrap_pb">
 	<div class="headPic">		
-		<img id="img_headPic" src="${basePath}images/headpic.png"  onclick="uploadFileImg('headPic')" width="100" height="100" style="border-radius:50%">
-		<input type="file" name="headPic" style="display:none"  id="headPic" />
+		<img id="img_headPic" src="${request.contextPath}/images/headpic.png"  onclick="getFileImg('headPic')" width="100" height="100" style="border-radius:50%">
+		<input type="file" name="headPic" style="display:none"  id="headPic" onchange="uploadImg('headPic')"/>
 	</div>
 	<!-- <div class="text-c bgWhite size16 personInfor">李备</div>
 	<div class="text-c bgWhite size16 personInfor">410532******332145</div> -->
 	<div class="cardInfor">
-		<a><img id="img_cardPicName" src="${basePath}images/cardInfor_03.png" onclick="uploadFileImg('cardPicName')" width="160px" height="100px" class="mt30" ></a>
+		<a><img id="img_cardPicName" src="${request.contextPath}/images/cardInfor_03.png" onclick="getFileImg('cardPicName')" width="160px" height="100px" class="mt30" onclick="uploadImg22('cardPicName')"></a>
 		<p class="text-c size14">上传身份证正面</p>
-		<input type="file" accept="image/*"  name="cardPicName" style="display:none" id="cardPicName" />
+		<input type="file" accept="image/*"  name="cardPicName" style="display:none" id="cardPicName" onchange="uploadImg('cardPicName')"/>
 	</div>
 	<div class="cardInfor ">
-		<a><img id="img_cardPicName2" src="${basePath}images/cardInfor_07.png" onclick="uploadFileImg('cardPicName2')" width="160px" height="100px" class="mt30" ></a>
+		<a><img id="img_cardPicName2" src="${request.contextPath}/images/cardInfor_07.png" onclick="getFileImg('cardPicName2')" width="160px" height="100px" class="mt30" onclick="uploadImg22('cardPicName2')"></a>
 		<p class="text-c size14">上传身份证背面</p>
-		<input type="file" accept="image/*"  name="cardPicName2" style="display:none" id="cardPicName2" />
+		<input type="file" accept="image/*"  name="cardPicName2" style="display:none" id="cardPicName2" onchange="uploadImg('cardPicName2')"/>
 	</div>
 	<div class="cardInfor">
-		<a><img id="img_businessCard" src="${basePath}images/cardInfor_10.png" onclick="uploadFileImg('businessCard')" width="160px" height="100px" class="mt30" ></a>
+		<a><img id="img_businessCard" src="${request.contextPath}/images/cardInfor_10.png" onclick="getFileImg('businessCard')" width="160px" height="100px" class="mt30" onclick="uploadImg22('businessCard')"></a>
 		<p class="text-c size14">上传名片</p>
-		<input type="file" accept="image/*"  name="businessCard" style="display:none" id="businessCard" />
+		<input type="file" accept="image/*"  name="businessCard" style="display:none" id="businessCard" onchange="uploadImg('businessCard')"/>
 	</div>
 	<div class="pos_fix w100 size18" style="bottom:0">
 		<button class="whiteGreen_Btn" id="btnRegister">加入飞单</button>
@@ -76,16 +74,19 @@ $(function(){
 			return;
 		}
 		var pwd='${pwd!''}';
-		var url="${basePath}sanhuo/visit/reg.do";
+		var url="${request.contextPath}/sanhuo/visit/reg.do";
 		$.getJSON(url,datas,function(data,textStatus){
 			if(textStatus=='success'){
 				if(data.success){
 			         showMaskLayTips('注册成功!');
+			         if(window.androidObj){
+			        		window.androidObj.synPhoneAndPassword(tphone, pwd);
+			         }
 			         if(window.localStorage){ //是否支持本地存储
 			        		localStorage.setItem("phone",tphone);
 			        		localStorage.setItem("password",pwd);
 			         }
-			         location.href="${basePath}sanhuo/visit/index.do";
+			         location.href="${request.contextPath}/sanhuo/visit/index.do";
 			     }else{
 			         showMaskLayTips(data.message);
 			     }
@@ -104,41 +105,40 @@ function showMaskLayTips(tip){
 	$("#masklaytips").show();
 	$("#errorTips").html(tip);   
 }
-var uploadFileFlag=false;
-function uploadFileImg(filename){
-	if(uploadFileFlag){
-		showMaskLayTips('正在上传图片');
-		return;
-	}
-	//调用 拍照或从手机相册中选图接口
-	 wx.chooseImage({
-	     count:1, // 默认9
-		 sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
-	     success: function(res) {
-	    	 uploadFileFlag=true;
-	         $('#img_'+filename).attr('src',res.localIds[0]); 
-	         uploadImage(res.localIds[0],filename);
-	     }
-	 });
+function getFileImg(id){
+	$("#"+id).click();
 }
-
-function uploadImage(imagePath,filename){
-  
-   	wx.uploadImage({
-   	    localId:imagePath, // 需要上传的图片的本地ID，由chooseImage接口获得
-   	    isShowProgressTips: 1, // 默认为1，显示进度提示
-   	    success: function (res) {
-   	        var serverId1 = res.serverId; // 返回图片的服务器端ID1
-   	    	$.post("${basePath}visit/wx/uploadFile.do",{serverId:serverId1},function(result){
-   	    		if(result && result.success){
-   	    			datas[filename]=result.message;
-   	    		}else{
-   	    			showMaskLayTips(result.message);
-   	    		}
-   	    		uploadFileFlag=false;
-   	    	});
-   	    }
-   	});    	
+function uploadImg(name){	
+	var imgPath = $('#'+name).val();
+    if (imgPath == "") {
+    	showMaskLayTips("请选择上传图片！");
+        return;
+    }
+    var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1);
+    if (strExtension != 'jpg' && strExtension != 'gif'
+    && strExtension != 'png' && strExtension != 'bmp') {
+    	showMaskLayTips("请选择图片文件");
+        return;
+    }
+	var data = new FormData();
+	$.each($('#'+name)[0].files, function(i, file) {
+		data.append('file', file);
+	});
+	$.ajax({
+		url:'${request.contextPath}/upload',
+		type:'POST',
+		data:data,
+		cache: false,
+		contentType: false,    //不可缺
+		processData: false,    //不可缺
+		success:function(data){
+		    var img = data.substring(data.indexOf('back(\'') + 6, data.indexOf('\')<'));
+		    datas[name] = img;
+		    $('#img_'+name).attr('src', '${request.contextPath}/visit/image/'+img+'.do');
+		},error: function(XMLHttpRequest, textStatus, errorThrown) {
+        	showMaskLayTips("上传失败，请检查网络后重试:"+errorThrown);
+        }
+	});
 }
 </script>
 

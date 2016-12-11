@@ -46,22 +46,24 @@
 		<div class="main-content">
 			#parse('WEB-INF/pages/admin/mainHomeMenu.vm')
 			<div class="page-content">
-			<form action="${basePath}upload.xhtml" method="post" enctype="multipart/form-data">  
-    选择文件:<input type="file" name="file">  
-    <input type="submit" value="提交">   
-</form>  
-
 		<form class="form-horizontal" role="form" id="dbform">
 			<div class="form-group">
 			</div>
 			<div class="form-group">
 				<label for="name" class="col-sm-2 control-label">上传图片</label>
-				<img src="${basePath}images/upbg.jpg" width="110px;" height="100px;" onclick="getFileImg('logo')"/>
+				<img id="img_logo" src="${basePath}images/upbg.jpg" width="110px;" height="100px;" onclick="getFileImg('logo')"/>
 				<input type="file" name="logo" style="display:none"  id="logo" onchange="uploadImg('logo')"/>
-				<img src="${basePath}images/upbg.jpg" width="110px;" height="100px;"/>
-				<img src="${basePath}images/upbg.jpg" width="110px;" height="100px;"/>
-				<img src="${basePath}images/upbg.jpg" width="110px;" height="100px;"/>
-				<img src="${basePath}images/upbg.jpg" width="110px;" height="100px;"/>
+				#foreach($i in [1..4])
+				<img id="img_f$i" src="${basePath}images/upbg.jpg" width="110px;" height="100px;" onclick="getFileImg('f$i')"/>
+				<input type="file" name="f$i" style="display:none"  id="f$i" onchange="uploadImg('f$i')"/>
+				#end
+			</div>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">&nbsp;</label>
+				#foreach($i in [5..9])
+				<img id="img_f$i" src="${basePath}images/upbg.jpg" width="110px;" height="100px;" onclick="getFileImg('f$i')"/>
+				<input type="file" name="f$i" style="display:none"  id="f$i" onchange="uploadImg('f$i')"/>
+				#end
 			</div>
 			<div class="form-group">
 				<label for="name" class="col-sm-2 control-label">中文名称</label>
@@ -288,6 +290,7 @@ $(document).ready(function(){
 		});
 	});
 });
+var datas={};
 function getFileImg(filename){
 	$('#'+filename).click();
 }
@@ -313,7 +316,7 @@ function uploadImg(name){
 		success:function(data){
 		    var img = data.substring(data.indexOf('back(\'') + 6, data.indexOf('\')<'));
 		    datas[name] = img;
-		    $('#img_'+name).attr('src', '${imgPath}'+img);
+		    $('#img_'+name).attr('src', '${imagePath}'+img);
 		},error: function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("上传失败，请检查网络后重试:"+errorThrown);
         }
