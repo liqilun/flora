@@ -48,21 +48,26 @@
 			<div class="page-content">
 		<form class="form-horizontal" role="form" id="dbform">
 			<div class="form-group">
+				<input type="hidden" name="logo" id="logo" value="$!flower.logo"/>
 			</div>
 			<div class="form-group">
 				<label for="name" class="col-sm-2 control-label">上传图片</label>
-				<img id="img_logo" src="${basePath}images/upbg.jpg" width="110px;" height="100px;" onclick="getFileImg('logo')"/>
-				<input type="file" name="logo" style="display:none"  id="logo" onchange="uploadImg('logo')"/>
+				<img id="img_logo1" #if($flower.logo)src="${imagePath}${flower.logo}"#{else}src="${basePath}images/upbg.jpg"#end width="110px;" height="100px;" onclick="getFileImg('logo1')"/>
+				<input type="file" name="logo1" style="display:none"  id="logo1" onchange="uploadImg('logo1','logo')"/>
 				#foreach($i in [1..4])
-				<img id="img_f$i" src="${basePath}images/upbg.jpg" width="110px;" height="100px;" onclick="getFileImg('f$i')"/>
-				<input type="file" name="f$i" style="display:none"  id="f$i" onchange="uploadImg('f$i')"/>
+				#set($tag='img'+$i)
+				<input type="hidden" data-id="$tag"  name="img$i" id="img$i" value="$!{imgMap.get($tag).imgName}"/>
+				<img id="img_f$i" #if($imgMap.containsKey($tag))src="${imagePath}$!{imgMap.get($tag).imgName}"#{else}src="${basePath}images/upbg.jpg"#end width="110px;" height="100px;" onclick="getFileImg('f$i')"/>
+				<input type="file" name="f$i" style="display:none"  id="f$i" onchange="uploadImg('f$i','img$i')"/>
 				#end
 			</div>
 			<div class="form-group">
 				<label for="name" class="col-sm-2 control-label">&nbsp;</label>
 				#foreach($i in [5..9])
-				<img id="img_f$i" src="${basePath}images/upbg.jpg" width="110px;" height="100px;" onclick="getFileImg('f$i')"/>
-				<input type="file" name="f$i" style="display:none"  id="f$i" onchange="uploadImg('f$i')"/>
+				#set($tag='img'+$i)
+				<input type="hidden" data-id="$tag"  name="img$i" id="img$i" value="$!{imgMap.get($tag).imgName}"/>
+				<img id="img_f$i" #if($imgMap.containsKey($tag))src="${imagePath}$!{imgMap.get($tag).imgName}"#{else}src="${basePath}images/upbg.jpg"#end width="110px;" height="100px;" onclick="getFileImg('f$i')"/>
+				<input type="file" name="f$i" style="display:none"  id="f$i" onchange="uploadImg('f$i','img$i')"/>
 				#end
 			</div>
 			<div class="form-group">
@@ -282,12 +287,13 @@
 var datas={};
 $(document).ready(function(){
 	$('#sbtForm').click(function(){
-		if(datas.logo==null || datas.logo==''){
+		if($('#logo').val()==''){
 			alert('请上传图片');
 			return;
 		}
 		jQuery.post("${basePath}admin/flower/saveFlower.xhtml", $("#dbform").serialize(),function(result){
 			if(result.success){
+				alert('保存成功');
 				document.location.href='${basePath}admin/flower/list.xhtml';
 			}else {
 				alert(result.msg);
@@ -299,7 +305,7 @@ var datas={};
 function getFileImg(filename){
 	$('#'+filename).click();
 }
-function uploadImg(name){	
+function uploadImg(name, imgv){	
 	var imgPath = $('#'+name).val();
     var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1);
     if (strExtension != 'jpg' && strExtension != 'gif'
@@ -322,6 +328,7 @@ function uploadImg(name){
 		    var img = data.substring(data.indexOf('back(\'') + 6, data.indexOf('\')<'));
 		    datas[name] = img;
 		    $('#img_'+name).attr('src', '${imagePath}'+img);
+		    $('#'+imgv).val(img);
 		},error: function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("上传失败，请检查网络后重试:"+errorThrown);
         }

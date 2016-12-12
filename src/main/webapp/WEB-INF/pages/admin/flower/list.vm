@@ -71,22 +71,41 @@
 										   <tbody>
 										   	  #foreach($flower in $flowerList)
 										      <tr>
-										      	 <td>${imagePath}${flower.logo}</td>
+										      	 <td><img src="${imagePath}${flower.logo}" height="50" width="50"></td>
 										         <td>$!flower.name</td>
-										         <td>$!flower.viewArea</td>
-										         <td>$!flower.attribute</td>
-										         <td>$!flower.grp</td>
+										         <td>
+										          #foreach($viewArea in $viewAreaMap.keySet())
+										          #if($flower && $flower.viewAreaList.contains($viewArea))
+										          $viewAreaMap.get($viewArea)&nbsp;	
+										          #end
+										          #end
+										         </td>
+										         <td>
+												 #foreach($attribute in $attributeMap.keySet())
+												 #if($flower && $flower.attributeList.contains($attribute))
+												 $attributeMap.get($attribute)&nbsp;
+												 #end
+												 #end
+												 </td>
+										         <td>
+													#foreach($grp in $grpMap.keySet())
+													   #if($flower && $flower.grpList.contains($grp))
+													   $grpMap.get($grp)&nbsp;
+													   #end
+												   #end
+												 </td>
 										         <td>
 										         	$!DateUtil.format($flower.addTime,'yyyy-MM-dd')
 										         </td>
 												 <td>
-												 	<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#accountModal" name="account" data-id="$stadium.id">登录账户</button>
+												 	<a class="btn btn-xs btn-danger" href="${basePath}admin/flower/modify.xhtml?id=${flower.id}">修改</a>&nbsp;
+												 	<a class="btn btn-xs btn-danger" href="${basePath}admin/flower/modify.xhtml?id=${flower.id}">图片</a>
 												 </td>
 										      </tr>
 										      #end
 										   </tbody>
 										</table>
-										
+										#parse('WEB-INF/include/pageUtil.vm')
 									</div>
 								</div>
 							</div>
