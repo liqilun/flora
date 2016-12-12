@@ -53,11 +53,21 @@ public class FlowerController extends BaseController {
 		for(FlowerImg img : imgList){
 			imgMap.put(img.getTag(), img);
 		}
+		Flower flower = daoService.getObject(Flower.class, flowerId);
 		model.put("imgMap",imgMap);
-		return "admin/flower/flowerImgList.vm";
+		model.put("flower",flower);
+		model.put("imgList",imgList);
+		return "admin/flower/flowerImg.vm";
+	}
+	@RequestMapping("/admin/flower/setLogo.xhtml")
+	public String setLogo(Integer id, ModelMap model) {
+		FlowerImg img = daoService.getObject(FlowerImg.class, id);
+		Flower flower = daoService.getObject(Flower.class, img.getFlowerId());
+		flower.setLogo(img.getImgName());
+		daoService.saveObject(flower);
+		return writeJsonSuccess(model);
 	}
 	@RequestMapping("/admin/flower/setflowerImgSortNum.xhtml")
-	@ResponseBody
 	public String setflowerImgSortNum(Integer id, Integer sortNum, ModelMap model, HttpServletRequest request) {
 		FlowerImg img = daoService.getObject(FlowerImg.class, id);
 		img.setSortNum(sortNum);

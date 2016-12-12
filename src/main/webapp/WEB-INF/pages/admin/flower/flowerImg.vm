@@ -48,7 +48,7 @@
 			<div class="page-content">
 				<div class="page-header">
 					<div class="col-xs-12">
-						<h3 class="header smaller lighter blue pull-left">植物列表</h3>
+						<h3 class="header smaller lighter blue pull-left">图片设置</h3>
 						<h5 class="header smaller lighter blue pull-right"><a class="btn btn-xs btn-default" href="${basePath}admin/flower/modify.xhtml">添加</a></h5>
 					</div>
 					<div class="row">
@@ -60,47 +60,16 @@
 										   <thead>
 										      <tr>
 										      	 <th>图片</th>
-										         <th>植物名称</th>
-										         <th>观赏部位</th>
-										         <th>植株性质</th>
-										         <th>类群</th>
-										         <th>添加日期</th>
-										         <th>操作</th>
+										         <th>排序</th>
+										         <th>设置为Logo</th>
 										      </tr>
 										   </thead>
 										   <tbody>
-										   	  #foreach($flower in $flowerList)
+										   	  #foreach($img in $imgList)
 										      <tr>
-										      	 <td><img src="${imagePath}${flower.logo}" height="50" width="50"></td>
-										         <td>$!flower.name</td>
-										         <td>
-										          #foreach($viewArea in $viewAreaMap.keySet())
-										          #if($flower && $flower.viewAreaList.contains($viewArea))
-										          $viewAreaMap.get($viewArea)&nbsp;	
-										          #end
-										          #end
-										         </td>
-										         <td>
-												 #foreach($attribute in $attributeMap.keySet())
-												 #if($flower && $flower.attributeList.contains($attribute))
-												 $attributeMap.get($attribute)&nbsp;
-												 #end
-												 #end
-												 </td>
-										         <td>
-													#foreach($grp in $grpMap.keySet())
-													   #if($flower && $flower.grpList.contains($grp))
-													   $grpMap.get($grp)&nbsp;
-													   #end
-												   #end
-												 </td>
-										         <td>
-										         	$!DateUtil.format($flower.addTime,'yyyy-MM-dd')
-										         </td>
-												 <td>
-												 	<a class="btn btn-xs btn-danger" href="${basePath}admin/flower/modify.xhtml?id=${flower.id}">修改</a>&nbsp;
-												 	<a class="btn btn-xs btn-danger" href="${basePath}admin/flower/flowerImgList.xhtml?flowerId=${flower.id}">图片</a>
-												 </td>
+										      	 <td><img src="${imagePath}${img.imgName}" height="120" width="120"></td>
+										         <td><input type="text" value="${img.sortNum}" onchange="setSortNum(${img.id},this.value)" style="width: 80px;"></td>
+										         <td><input type="button" onclick="setLogo(${img.id})" value="设置为Logo"></td>
 										      </tr>
 										      #end
 										   </tbody>
@@ -115,28 +84,25 @@
 			</div>
 		</div>
 </div>
-<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
-<div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="accountModalLabel" aria-hidden="true"></div>
 <script type="text/javascript">
-///$(function () { $("[data-toggle='tooltip']").tooltip(); });
-$("button[name=add]").click(function(){
-    $("#dataModal").load('${basePath}admin/stadium/stadiumDetail.xhtml',{"id":$(this).attr('data-id')});
-});
-$("button[name=account]").click(function(){
-    $("#accountModal").load('${basePath}admin/stadium/getApiAccount.xhtml',{"id":$(this).attr('data-id')});
-});
-$(document).ready(function(){
-	$("select[name=status]").change(function(){
-		var el = $(this);
-		jQuery.post("${basePath}admin/stadium/modStatus.xhtml", {"id":el.attr('id'),'status':el.val()},function(result){
-			if(result.success){
-				alert('设置成功');
-			}else {
-				alert(result.msg);
-			}
-		});
+function setSortNum(id,sortNum){
+	jQuery.post("${basePath}admin/flower/setflowerImgSortNum.xhtml", {"id":id,'sortNum':sortNum},function(result){
+		if(result.success){
+			alert('设置成功');
+		}else {
+			alert(result.msg);
+		}
 	});
-});
+}
+function setLogo(id){
+	jQuery.post("${basePath}admin/flower/setLogo.xhtml", {"id":id},function(result){
+		if(result.success){
+			alert('设置成功');
+		}else {
+			alert(result.msg);
+		}
+	});
+}
 </script>
 </body>
 </html>
