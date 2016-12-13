@@ -10,6 +10,7 @@
 		<property name="tag" type="string" column="tag"/>
 		<property name="flowerId" type="integer" column="flower_id" />
 		<property name="sortNum" type="integer" column="sort_num" />
+		<property name="status" type="string" column="status"/>
 		<property name="createTime" type="date" column="create_time" not-null="true"/>
 	</class>
 </hibernate-mapping>

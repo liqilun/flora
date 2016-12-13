@@ -10,6 +10,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,15 +26,42 @@ import com.flora.Config;
 import com.flora.model.Flower;
 import com.flora.model.FlowerImg;
 import com.flora.util.BindUtils;
+import com.flora.util.PageUtil;
 import com.flora.util.StringUtil;
 import com.flora.web.util.WebUtils;
 
 @Controller
 public class FlowerController extends BaseController {
+	private DetachedCriteria query(String name){
+		DetachedCriteria query = DetachedCriteria.forClass(Flower.class);
+		if(StringUtils.isNotBlank(name)){
+			query.add(Restrictions.like("name", name, MatchMode.ANYWHERE));
+		}
+		return query;
+	}
 	@RequestMapping("/admin/flower/list.xhtml")
-	public String list(ModelMap model) {
-		List<Flower> flowerList = daoService.getObjectList(Flower.class, "id", false, 0, 100);
+	public String list(String name, Integer pageNo, ModelMap model) {
+		if(pageNo==null || pageNo<0){
+			pageNo = 0;
+		}
+		int maxnum = 10;
+		int from = pageNo*maxnum;
+		DetachedCriteria query = query(name);
+		query.addOrder(Order.desc("id"));
+		List<Flower> flowerList = daoService.findByCriteria(query, from, maxnum);
+		
+		query = query(name);
+		query.setProjection(Projections.rowCount());
+		List list = daoService.findByCriteria(query);
+		int rowsCount = Integer.valueOf(list.get(0)+"");
+		PageUtil pageUtil = new PageUtil(rowsCount, maxnum, pageNo, "admin/flower/list.xhtml");
+		Map params = new HashMap();
+		if(StringUtils.isNotBlank(name)){
+			params.put("name", name);
+		}
+		pageUtil.initPageInfo(params);
 		model.put("flowerList",flowerList);
+		model.put("pageUtil",pageUtil);
 		return "admin/flower/list.vm";
 	}
 
@@ -48,7 +80,11 @@ public class FlowerController extends BaseController {
 	}
 	@RequestMapping("/admin/flower/flowerImgList.xhtml")
 	public String flowerImgList(Integer flowerId, ModelMap model) {
-		List<FlowerImg> imgList = daoService.getObjectListByField(FlowerImg.class, "flowerId", flowerId);
+		DetachedCriteria query = DetachedCriteria.forClass(FlowerImg.class);
+		query.add(Restrictions.eq("flowerId", flowerId));
+		query.add(Restrictions.eq("status", "y"));
+		query.addOrder(Order.asc("sortNum"));
+		List<FlowerImg> imgList = daoService.findByCriteria(query);
 		Map<String, FlowerImg> imgMap = new HashMap<String, FlowerImg>();
 		for(FlowerImg img : imgList){
 			imgMap.put(img.getTag(), img);
@@ -71,6 +107,13 @@ public class FlowerController extends BaseController {
 	public String setflowerImgSortNum(Integer id, Integer sortNum, ModelMap model, HttpServletRequest request) {
 		FlowerImg img = daoService.getObject(FlowerImg.class, id);
 		img.setSortNum(sortNum);
+		daoService.saveObject(img);
+		return writeJsonSuccess(model);
+	}
+	@RequestMapping("/admin/flower/delflowerImg.xhtml")
+	public String delflowerImg(Integer id, ModelMap model, HttpServletRequest request) {
+		FlowerImg img = daoService.getObject(FlowerImg.class, id);
+		img.setStatus("n");
 		daoService.saveObject(img);
 		return writeJsonSuccess(model);
 	}

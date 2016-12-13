@@ -105,8 +105,8 @@
 										      #end
 										   </tbody>
 										</table>
-										#parse('WEB-INF/include/pageUtil.vm')
 									</div>
+									#parse('WEB-INF/include/pageUtil.vm')
 								</div>
 							</div>
 						</div>
@@ -115,27 +115,8 @@
 			</div>
 		</div>
 </div>
-<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
-<div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="accountModalLabel" aria-hidden="true"></div>
 <script type="text/javascript">
-///$(function () { $("[data-toggle='tooltip']").tooltip(); });
-$("button[name=add]").click(function(){
-    $("#dataModal").load('${basePath}admin/stadium/stadiumDetail.xhtml',{"id":$(this).attr('data-id')});
-});
-$("button[name=account]").click(function(){
-    $("#accountModal").load('${basePath}admin/stadium/getApiAccount.xhtml',{"id":$(this).attr('data-id')});
-});
 $(document).ready(function(){
-	$("select[name=status]").change(function(){
-		var el = $(this);
-		jQuery.post("${basePath}admin/stadium/modStatus.xhtml", {"id":el.attr('id'),'status':el.val()},function(result){
-			if(result.success){
-				alert('设置成功');
-			}else {
-				alert(result.msg);
-			}
-		});
-	});
 });
 </script>
 </body>

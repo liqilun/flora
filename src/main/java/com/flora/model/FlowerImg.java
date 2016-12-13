@@ -10,6 +10,7 @@ public class FlowerImg extends BaseObject{
 	private Integer flowerId;
 	private Integer sortNum;
 	private String  tag;
+	private String status;
 	private Date createTime;
 	public FlowerImg(){
 		
@@ -19,6 +20,7 @@ public class FlowerImg extends BaseObject{
 		this.tag = tag;
 		this.imgName = imgName;
 		this.sortNum = 1;
+		this.status = "y";
 		this.createTime = new Date();
 	}
 	public Integer getId() {
@@ -60,5 +62,11 @@ public class FlowerImg extends BaseObject{
 	}
 	public void setSortNum(Integer sortNum) {
 		this.sortNum = sortNum;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

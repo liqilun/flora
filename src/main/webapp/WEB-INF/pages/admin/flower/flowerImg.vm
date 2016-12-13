@@ -62,6 +62,7 @@
 										      	 <th>图片</th>
 										         <th>排序</th>
 										         <th>设置为Logo</th>
+										         <th>删除</th>
 										      </tr>
 										   </thead>
 										   <tbody>
@@ -70,6 +71,7 @@
 										      	 <td><img src="${imagePath}${img.imgName}" height="120" width="120"></td>
 										         <td><input type="text" value="${img.sortNum}" onchange="setSortNum(${img.id},this.value)" style="width: 80px;"></td>
 										         <td><input type="button" onclick="setLogo(${img.id})" value="设置为Logo"></td>
+										         <td><input type="button" onclick="delflowerImg(${img.id})" value="删除"></td>
 										      </tr>
 										      #end
 										   </tbody>
@@ -98,6 +100,19 @@ function setLogo(id){
 	jQuery.post("${basePath}admin/flower/setLogo.xhtml", {"id":id},function(result){
 		if(result.success){
 			alert('设置成功');
+		}else {
+			alert(result.msg);
+		}
+	});
+}
+function delflowerImg(id){
+	if(!confirm('确认删除吗？')){
+		return;
+	}
+	jQuery.post("${basePath}admin/flower/delflowerImg.xhtml", {"id":id},function(result){
+		if(result.success){
+			alert('删除成功');
+			location.href = location.href ;
 		}else {
 			alert(result.msg);
 		}
