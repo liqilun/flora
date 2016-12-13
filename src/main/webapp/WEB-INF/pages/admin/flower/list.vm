@@ -71,7 +71,7 @@
 										   <tbody>
 										   	  #foreach($flower in $flowerList)
 										      <tr>
-										      	 <td><img src="${imagePath}${flower.logo}" height="50" width="50"></td>
+										      	 <td><img src="${imagePath}${flower.logo}" class="img-circle"></td>
 										         <td>$!flower.name</td>
 										         <td>
 										          #foreach($viewArea in $viewAreaMap.keySet())

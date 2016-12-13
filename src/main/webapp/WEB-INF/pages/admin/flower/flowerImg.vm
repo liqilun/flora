@@ -68,7 +68,7 @@
 										   <tbody>
 										   	  #foreach($img in $imgList)
 										      <tr>
-										      	 <td><img src="${imagePath}${img.imgName}" height="120" width="120"></td>
+										      	 <td><img src="${imagePath}${img.imgName}"  class="img-circle"></td>
 										         <td><input type="text" value="${img.sortNum}" onchange="setSortNum(${img.id},this.value)" style="width: 80px;"></td>
 										         <td><input type="button" onclick="setLogo(${img.id})" value="设置为Logo"></td>
 										         <td><input type="button" onclick="delflowerImg(${img.id})" value="删除"></td>
