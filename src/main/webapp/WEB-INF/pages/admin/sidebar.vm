@@ -25,12 +25,22 @@
 				<i class="icon-dashboard"></i><span class="menu-text"> 控制台 </span>
 			</a>
 		</li>
-		<li #if($isStadiumMenu)class="active open"#end>
+		<li #if($isFlowerMenu)class="active open"#end>
 			<a class="dropdown-toggle" href="#">
 				<i class="icon-desktop"></i><span class="menu-text">植物管理 </span><b class="arrow icon-angle-down"></b>
 			</a>
 			<ul class="submenu">
 				<li #if($isFlowerMenu)class="active"#end><a href="${basePath}admin/flower/list.xhtml"><i class="icon-double-angle-right"></i>植物列表</a></li>
+			</ul>
+		</li>
+		<li #if($isAppointmentMenu)class="active open"#end>
+			<a class="dropdown-toggle" href="#">
+				<i class="icon-desktop"></i><span class="menu-text">在线预定 </span><b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li #if($isAppointmentBannerMenu)class="active"#end><a href="${basePath}admin/flowerAd/list.xhtml"><i class="icon-double-angle-right"></i>banner位置</a></li>
+				<li #if($isAppointmentServiceMenu)class="active"#end><a href="${basePath}admin/flower/list.xhtml"><i class="icon-double-angle-right"></i>绿植租摆服务流程</a></li>
+				<li #if($isAppointmentRegionMenu)class="active"#end><a href="${basePath}admin/flower/list.xhtml"><i class="icon-double-angle-right"></i>模板区域</a></li>
 			</ul>
 		</li>
 	</ul>
