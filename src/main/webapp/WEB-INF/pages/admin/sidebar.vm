@@ -43,6 +43,30 @@
 				<li #if($isAppointmentRegionMenu)class="active"#end><a href="${basePath}admin/flower/list.xhtml"><i class="icon-double-angle-right"></i>模板区域</a></li>
 			</ul>
 		</li>
+		<li #if($isExpMenu)class="active open"#end>
+			<a class="dropdown-toggle" href="#">
+				<i class="icon-desktop"></i><span class="menu-text">体验馆 </span><b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li #if($isCaseMenu)class="active"#end><a href="${basePath}admin/flowerAd/list.xhtml"><i class="icon-double-angle-right"></i>案例列表</a></li>
+			</ul>
+		</li>
+		<li #if($isClassMenu)class="active open"#end>
+			<a class="dropdown-toggle" href="#">
+				<i class="icon-desktop"></i><span class="menu-text">植物课堂 </span><b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+					<li #if($isArticleMenu)class="active"#end><a href="${basePath}admin/flowerAd/list.xhtml"><i class="icon-double-angle-right"></i>文章列表</a></li>
+				</ul>
+		</li>
+		<li #if($isCustomAppointMenu)class="active open"#end>
+			<a class="dropdown-toggle" href="#">
+				<i class="icon-desktop"></i><span class="menu-text">客户预约 </span><b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+					<li #if($isCustomAppointList)class="active"#end><a href="${basePath}admin/flowerAd/list.xhtml"><i class="icon-double-angle-right"></i>预约列表</a></li>
+				</ul>
+		</li>
 	</ul>
 	<script type="text/javascript">
 		try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
