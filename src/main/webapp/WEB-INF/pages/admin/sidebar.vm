@@ -27,7 +27,7 @@
 		</li>
 		<li #if($isFlowerMenu)class="active open"#end>
 			<a class="dropdown-toggle" href="#">
-				<i class="icon-desktop"></i><span class="menu-text">植物管理 </span><b class="arrow icon-angle-down"></b>
+				<i class="icon-home"></i><span class="menu-text">植物管理 </span><b class="arrow icon-angle-down"></b>
 			</a>
 			<ul class="submenu">
 				<li #if($isFlowerMenu)class="active"#end><a href="${basePath}admin/flower/list.xhtml"><i class="icon-double-angle-right"></i>植物列表</a></li>
@@ -35,7 +35,7 @@
 		</li>
 		<li #if($isAppointmentMenu)class="active open"#end>
 			<a class="dropdown-toggle" href="#">
-				<i class="icon-desktop"></i><span class="menu-text">在线预定 </span><b class="arrow icon-angle-down"></b>
+				<i class="icon-laptop"></i><span class="menu-text">在线预定 </span><b class="arrow icon-angle-down"></b>
 			</a>
 			<ul class="submenu">
 				<li #if($isAppointmentBannerMenu)class="active"#end><a href="${basePath}admin/flowerAd/list.xhtml?tag=appointmentBanner"><i class="icon-double-angle-right"></i>banner位置</a></li>
@@ -45,7 +45,7 @@
 		</li>
 		<li #if($isExpMenu)class="active open"#end>
 			<a class="dropdown-toggle" href="#">
-				<i class="icon-desktop"></i><span class="menu-text">体验馆 </span><b class="arrow icon-angle-down"></b>
+				<i class="icon-flag"></i><span class="menu-text">体验馆 </span><b class="arrow icon-angle-down"></b>
 			</a>
 			<ul class="submenu">
 				<li #if($isCaseMenu)class="active"#end><a href="${basePath}admin/flowerAd/list.xhtml"><i class="icon-double-angle-right"></i>案例列表</a></li>
@@ -61,7 +61,7 @@
 		</li>
 		<li #if($isCustomAppointMenu)class="active open"#end>
 			<a class="dropdown-toggle" href="#">
-				<i class="icon-desktop"></i><span class="menu-text">客户预约 </span><b class="arrow icon-angle-down"></b>
+				<i class="icon-user"></i><span class="menu-text">客户预约 </span><b class="arrow icon-angle-down"></b>
 			</a>
 			<ul class="submenu">
 					<li #if($isCustomAppointList)class="active"#end><a href="${basePath}admin/flowerAd/list.xhtml"><i class="icon-double-angle-right"></i>预约列表</a></li>
