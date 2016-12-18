@@ -26,6 +26,7 @@ public class FlowerAdController extends BaseController {
 	private DetachedCriteria query(String tag){
 		DetachedCriteria query = DetachedCriteria.forClass(FlowerAd.class);
 		query.add(Restrictions.eq("tag", tag));
+		query.add(Restrictions.eq("status", "y"));
 		return query;
 	}
 	@RequestMapping("/admin/flowerAd/list.xhtml")
@@ -37,16 +38,16 @@ public class FlowerAdController extends BaseController {
 		int from = pageNo*maxnum;
 		DetachedCriteria query = query(tag);
 		query.addOrder(Order.desc("id"));
-		List<FlowerAd> flowerList = daoService.findByCriteria(query, from, maxnum);
+		List<FlowerAd> flowerAdList = daoService.findByCriteria(query, from, maxnum);
 		
 		query = query(tag);
 		query.setProjection(Projections.rowCount());
 		List list = daoService.findByCriteria(query);
 		int rowsCount = Integer.valueOf(list.get(0)+"");
-		PageUtil pageUtil = new PageUtil(rowsCount, maxnum, pageNo, "admin/flowerad/list.xhtml");
+		PageUtil pageUtil = new PageUtil(rowsCount, maxnum, pageNo, "admin/flowerAd/list.xhtml");
 		Map params = new HashMap();
 		pageUtil.initPageInfo(params);
-		model.put("floweradList",flowerList);
+		model.put("flowerAdList",flowerAdList);
 		model.put("pageUtil",pageUtil);
 		return "admin/flowerad/list.vm";
 	}
@@ -54,7 +55,7 @@ public class FlowerAdController extends BaseController {
 	@RequestMapping("/admin/flowerAd/modify.xhtml")
 	public String modify(Integer id, ModelMap model) {
 		if (id != null) {
-			model.put("flowerad", daoService.getObject(FlowerAd.class, id));
+			model.put("flowerAd", daoService.getObject(FlowerAd.class, id));
 			List<FlowerImg> imgList = daoService.getObjectListByField(FlowerImg.class, "flowerId", id);
 			Map<String, FlowerImg> imgMap = new HashMap<String, FlowerImg>();
 			for(FlowerImg img : imgList){
@@ -74,6 +75,20 @@ public class FlowerAdController extends BaseController {
 			ad.setCreateTime(new Date());
 		}
 		BindUtils.bindData(ad, WebUtils.getRequestMap(request));
+		daoService.saveObject(ad);
+		return writeJsonSuccess(model);
+	}
+	@RequestMapping("/admin/flowerAd/setSortNum.xhtml")
+	public String place(Integer id,  Integer sortNum, ModelMap model, HttpServletRequest request) {
+		FlowerAd ad = daoService.getObject(FlowerAd.class, id);
+		ad.setSortNum(sortNum);
+		daoService.saveObject(ad);
+		return writeJsonSuccess(model);
+	}
+	@RequestMapping("/admin/flowerAd/del.xhtml")
+	public String del(Integer id,  ModelMap model, HttpServletRequest request) {
+		FlowerAd ad = daoService.getObject(FlowerAd.class, id);
+		ad.setStatus("n");
 		daoService.saveObject(ad);
 		return writeJsonSuccess(model);
 	}

@@ -48,231 +48,27 @@
 			<div class="page-content">
 		<form class="form-horizontal" role="form" id="dbform">
 			<div class="form-group">
-				<input type="hidden" name="logo" id="logo" value="$!flower.logo"/>
+				<input type="hidden" name="id" value="$!flowerAd.id"/>	
+				<input type="hidden" name="imgName" id="imgName" value="$!flowerAd.imgName"/>
+				<input type="hidden" name="tag" id="tag" value="$!{flowerAd.tag}$!{params.tag}"/>
 			</div>
 			<div class="form-group">
 				<label for="name" class="col-sm-2 control-label">上传图片</label>
-				<img id="img_logo1" #if($flower.logo)src="${imagePath}${flower.logo}"#{else}src="${basePath}images/upbg.jpg"#end width="110px;" height="100px;" onclick="getFileImg('logo1')"/>
-				<input type="file" name="logo1" style="display:none"  id="logo1" onchange="uploadImg('logo1','logo')"/>
-				#foreach($i in [1..4])
-				#set($tag='img'+$i)
-				<input type="hidden" data-id="$tag"  name="img$i" id="img$i" value="$!{imgMap.get($tag).imgName}"/>
-				<img id="img_f$i" #if($imgMap.containsKey($tag))src="${imagePath}$!{imgMap.get($tag).imgName}"#{else}src="${basePath}images/upbg.jpg"#end width="110px;" height="100px;" onclick="getFileImg('f$i')"/>
-				<input type="file" name="f$i" style="display:none"  id="f$i" onchange="uploadImg('f$i','img$i')"/>
-				#end
+				<img id="img_pic" #if($flowerAd.imgName)src="${imagePath}${flowerAd.imgName}"#{else}src="${basePath}images/upbg.jpg"#end width="110px;" height="100px;" onclick="getFileImg('pic')"/>
+				<input type="file" name="pic" style="display:none"  id="pic" onchange="uploadImg('pic','imgName')"/>
 			</div>
+			#if($link)
 			<div class="form-group">
-				<label for="name" class="col-sm-2 control-label">&nbsp;</label>
-				#foreach($i in [5..9])
-				#set($tag='img'+$i)
-				<input type="hidden" data-id="$tag"  name="img$i" id="img$i" value="$!{imgMap.get($tag).imgName}"/>
-				<img id="img_f$i" #if($imgMap.containsKey($tag))src="${imagePath}$!{imgMap.get($tag).imgName}"#{else}src="${basePath}images/upbg.jpg"#end width="110px;" height="100px;" onclick="getFileImg('f$i')"/>
-				<input type="file" name="f$i" style="display:none"  id="f$i" onchange="uploadImg('f$i','img$i')"/>
-				#end
-			</div>
-			<div class="form-group">
-				<label for="name" class="col-sm-2 control-label">中文名称</label>
+				<label for="name" class="col-sm-2 control-label">链接</label>
 				<div class="col-sm-10">
-					<input type="hidden" name="id" value="$!flower.id"/>	
-					<input type="text" class="form-control" name="name"  value="$!flower.name">
+					<input type="text" class="form-control" name="link"  value="$!flowerAd.lnik">
 				</div>
 			</div>
+			#end
 			<div class="form-group">
-				<label for="name" class="col-sm-2 control-label">拉丁学名</label>
+				<label for="name" class="col-sm-2 control-label">排序</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" name="ldName" value="$!flower.ldName">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="aliasName" class="col-sm-2 control-label">别称</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="aliasName" value="$!flower.aliasName">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="englishName" class="col-sm-2 control-label">英文名</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="englishName" value="$!flower.englishName">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="category" class="col-sm-2 control-label">门类科属</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="category" value="$!flower.category">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="types" class="col-sm-2 control-label">主要品种</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="types" value="$!flower.types">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="viewArea" class="col-sm-2 control-label">观赏部位</label>
-				<div class="col-sm-10">
-				   #foreach($viewArea in $viewAreaMap.keySet())
-				   		#if($flower && $flower.viewAreaList.contains($viewArea))
-						<input type="checkbox"  name="viewArea" value="$!{viewArea}" checked="checked">$!viewAreaMap.get($viewArea)&nbsp;&nbsp;
-				   		#else
-				   		<input type="checkbox"  name="viewArea" value="$!{viewArea}">$!viewAreaMap.get($viewArea)&nbsp;&nbsp;
-				   		#end
-				   #end
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="attribute" class="col-sm-2 control-label">植株性质</label>
-				<div class="col-sm-10">
-				   #foreach($attribute in $attributeMap.keySet())
-					   #if($flower && $flower.attributeList.contains($attribute))
-					   <input type="checkbox"  name="attribute" value="$!{attribute}" checked="checked">$!attributeMap.get($attribute)&nbsp;&nbsp;
-					   #else
-					    <input type="checkbox"  name="attribute" value="$!{attribute}">$!attributeMap.get($attribute)&nbsp;&nbsp;
-					   #end
-				   #end
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="grp" class="col-sm-2 control-label">类群</label>
-				<div class="col-sm-10">
-				   #foreach($grp in $grpMap.keySet())
-					   #if($flower && $flower.grpList.contains($grp))
-					   <input type="checkbox"  name="grp" value="$!{grp}" checked="checked">$!grpMap.get($grp)&nbsp;&nbsp;
-					   #else
-					   <input type="checkbox"  name="grp" value="$!{grp}">$!grpMap.get($grp)&nbsp;&nbsp; 
-					   #end
-				   #end
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="producer" class="col-sm-2 control-label">产地分布</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="producer" value="$!flower.producer">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="worth" class="col-sm-2 control-label">主要价值</label>
-				<div class="col-sm-10">
-				   #foreach($worth in $worthMap.keySet())
-				   		#if($flower && $flower.worthList.contains($worth))
-				   		<input type="checkbox"  name="worth" value="$!{grp}" checked="checked">$!worthMap.get($worth)&nbsp;&nbsp;
-				   		#else
-				   		<input type="checkbox"  name="worth" value="$!{grp}">$!worthMap.get($worth)&nbsp;&nbsp;
-				   		#end
-				    #end
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="habit" class="col-sm-2 control-label">生长习性</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="habit" value="$!flower.habit">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="fitEnv" class="col-sm-2 control-label">适宜环境</label>
-				<div class="col-sm-10">
-				   #foreach($fitEnv in $fitEnvMap.keySet())
-				   <input type="radio"  name="fitEnv" value="$!{fitEnv}" #if($fitEnv==1 || ($flower && $flower.fitEnv==$fitEnv)) checked="checked"#end>$!fitEnvMap.get($fitEnv)&nbsp;&nbsp;
-				    #end
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="water" class="col-sm-2 control-label">水</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="water" value="$!flower.water">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="soil" class="col-sm-2 control-label">土壤</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="soil" value="$!flower.soil">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="humidity" class="col-sm-2 control-label">湿度</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="humidity" value="$!flower.humidity">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="feed" class="col-sm-2 control-label">施肥</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="feed" value="$!flower.feed">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="temperature" class="col-sm-2 control-label">适宜温度</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="temperature" value="$!flower.temperature">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="unTemperature" class="col-sm-2 control-label">不适宜温度</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="unTemperature" value="$!flower.unTemperature">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label for="flowerWord" class="col-sm-2 control-label">花语</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="flowerWord" value="$!flower.flowerWord">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="flowerDate" class="col-sm-2 control-label">花期</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="flowerDate" value="$!flower.flowerDate">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="sunNeed" class="col-sm-2 control-label">光照要求</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="sunNeed" value="$!flower.sunNeed">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="space"" class="col-sm-2 control-label">适宜摆放空间</label>
-				<div class="col-sm-10">
-				   <input type="text" class="form-control" name="space"" value="$!flower.space">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="size" class="col-sm-2 control-label">尺寸</label>
-				<div class="col-sm-10">
-				   #foreach($ssize in $sizeMap.keySet())
-					   #if($flower && $flower.sizeList.contains($ssize))
-					   <input type="checkbox"  name="size" value="$!{ssize}" checked="checked">$!sizeMap.get($ssize)&nbsp;&nbsp;
-					   #else
-					   <input type="checkbox"  name="size" value="$!{ssize}">$!sizeMap.get($ssize)&nbsp;&nbsp;
-					   #end
-				   #end
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="curingEasy" class="col-sm-2 control-label">养护难易</label>
-				<div class="col-sm-10">
-				   #foreach($curingEasy in $curingEasyMap.keySet())
-				   <input type="radio"  name="curingEasy" value="$!{curingEasy}" 
-				   		#if($curingEasy==1 || ($flower && $flower.curingEasy==$curingEasy)) checked="checked"#end>$!curingEasyMap.get($curingEasy)&nbsp;&nbsp;
-				    #end
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="zsStyle" class="col-sm-2 control-label">装饰风格</label>
-				<div class="col-sm-10">
-				   #foreach($zsStyle in $zsStyleMap.keySet())
-				   		 #if($flower && $flower.zsStyleList.contains($zsStyle))
-				   		<input type="checkbox"  name="zsStyle" value="$!{zsStyle}" checked="checked">$!zsStyleMap.get($zsStyle)&nbsp;&nbsp;
-				   		#else
-				   		<input type="checkbox"  name="zsStyle" value="$!{zsStyle}">$!zsStyleMap.get($zsStyle)&nbsp;&nbsp;
-				   		#end
-				    #end
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="content" class="col-sm-2 control-label">简介</label>
-				<div class="col-sm-10">
-				   <textarea class="form-control" name="content">$!flower.content</textarea>
+					<input type="text" class="form-control" name="sortNum" style="width:100px;" #if($!flowerAd)value="$!flowerAd.sortNum"#{else}value="1"#end>
 				</div>
 			</div>
 		<div class="modal-footer">
@@ -291,10 +87,10 @@ $(document).ready(function(){
 			alert('请上传图片');
 			return;
 		}
-		jQuery.post("${basePath}admin/flower/saveFlower.xhtml", $("#dbform").serialize(),function(result){
+		jQuery.post("${basePath}admin/flowerAd/save.xhtml", $("#dbform").serialize(),function(result){
 			if(result.success){
 				alert('保存成功');
-				document.location.href='${basePath}admin/flower/list.xhtml';
+				document.location.href='${basePath}admin/flowerAd/list.xhtml?tag=$!{flowerAd.tag}$!{params.tag}';
 			}else {
 				alert(result.msg);
 			}
